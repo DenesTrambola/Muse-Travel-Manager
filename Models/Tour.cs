@@ -1,18 +1,35 @@
-﻿namespace Muse_Travel_Manager.Models;
+﻿using System.ComponentModel.DataAnnotations;
 
-public class Tour(string destination, decimal price, DateTime startDate, int duration, string imagePath) : VisualEntity(imagePath)
+namespace Muse_Travel_Manager.Models;
+
+public class Tour : VisualEntity
 {
+    [Key]
     public int TourId { get; private set; }
 
-    public string Destination { get; private set; }
+    [Required]
+    public string Destination { get; private set; } = null!;
 
+    [Required]
     public decimal Price { get; private set; }
 
+    [Required]
     public DateTime StartDate { get; private set; }
 
+    [Required]
     public int Duration { get; private set; }
 
-    public string ImagePath { get; private set; }
+    public Tour() { }
+
+    public Tour(int tourId, string destination, decimal price, DateTime startDate, int duration, string imagePath)
+        : base(imagePath)
+    {
+        TourId = tourId;
+        Destination = destination;
+        Price = price;
+        StartDate = startDate;
+        Duration = duration;
+    }
 
     public string GetTourInfo() =>
         $"Tour ID: {TourId}\n" +
