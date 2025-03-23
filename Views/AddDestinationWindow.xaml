@@ -37,18 +37,32 @@
                 <ComboBoxItem Content="Осінь" />
             </ComboBox>
 
-            <Button Width="150" Content="Вибрати зображення" />
+            <Button
+                Width="150"
+                Click="SelectImage"
+                Content="Вибрати зображення" />
             <Image
                 Name="PreviewImage"
                 Width="200"
                 Height="120"
-                Margin="5" />
+                Margin="5"
+                Source="{Binding ImagePath, Converter={StaticResource ImagePathToImageSourceConverter}}" />
 
-            <Button
-                Width="100"
+            <StackPanel
                 Margin="10"
                 HorizontalAlignment="Center"
-                Content="Зберегти" />
+                Orientation="Horizontal">
+                <Button
+                    Width="100"
+                    Margin="5"
+                    Click="SaveDestination"
+                    Content="Зберегти" />
+                <Button
+                    Width="100"
+                    Margin="5"
+                    Click="Cancel"
+                    Content="Скасувати" />
+            </StackPanel>
         </StackPanel>
     </Grid>
 </Window>

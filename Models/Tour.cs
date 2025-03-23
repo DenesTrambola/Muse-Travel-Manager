@@ -19,12 +19,11 @@ public class Tour : VisualEntity
     [Required]
     public int Duration { get; private set; }
 
-    public Tour() { }
+    private Tour() { }
 
-    public Tour(int tourId, string destination, decimal price, DateTime startDate, int duration, string imagePath)
+    public Tour(string destination, decimal price, DateTime startDate, int duration, string? imagePath)
         : base(imagePath)
     {
-        TourId = tourId;
         Destination = destination;
         Price = price;
         StartDate = startDate;

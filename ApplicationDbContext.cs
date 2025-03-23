@@ -10,6 +10,10 @@ public class ApplicationDbContext : DbContext
     public DbSet<Booking> Bookings { get; set; } = null!;
     public DbSet<Destination> Destinations { get; set; } = null!;
 
+    public ApplicationDbContext() { }
+
+    public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) : base(options) { }
+
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
     {
         optionsBuilder.UseSqlite("Data Source=db.sqlite");

@@ -52,4 +52,13 @@ public class Booking
     {
         Status = BookingStatus.Cancelled;
     }
+
+    public string GetBookingInfo()
+    {
+        return $"Booking ID: {BookingId}\n" +
+               $"Tour ID: {TourId}\n" +
+               $"Client ID: {ClientId}\n" +
+               $"Booking Date: {BookingDate}\n" +
+               $"Status: {Status}";
+    }
 }

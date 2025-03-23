@@ -14,7 +14,7 @@ public class Destination : VisualEntity
 
     public string? PopularSeason { get; private set; }
 
-    public Destination() { }
+    private Destination() { }
 
     public Destination(string name, string? description, string? popularSeason, string? imagePath)
         : base(imagePath)
@@ -25,7 +25,7 @@ public class Destination : VisualEntity
     }
 
     public string GetDestinationDetails() =>
-        $"Destination: {Name}\n" +
+        $"Name: {Name}\n" +
         $"Description: {Description}\n" +
         $"Popular Season: {PopularSeason}\n" +
         $"Image Path: {ImagePath}";

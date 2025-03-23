@@ -10,6 +10,7 @@
     Height="550"
     MinWidth="800"
     MinHeight="450"
+    Loaded="LoadData"
     mc:Ignorable="d">
     <Grid Margin="10">
         <Grid.RowDefinitions>
@@ -20,13 +21,13 @@
 
         <StackPanel>
             <StackPanel Orientation="Horizontal">
-                <TextBlock Text="Назва туру:" />
+                <TextBlock Text="Пункт призначення:" />
                 <TextBlock
                     Margin="3,0"
                     Foreground="Red"
                     Text="*" />
             </StackPanel>
-            <TextBox Name="TourNameTextBox" Margin="0,5" />
+            <ComboBox Name="DestinationComboBox" Margin="0,5" />
 
             <StackPanel Orientation="Horizontal">
                 <TextBlock Text="Ціна:" />
@@ -47,16 +48,7 @@
             <DatePicker Name="TourDatePicker" Margin="0,5" />
 
             <StackPanel Orientation="Horizontal">
-                <TextBlock Text="Пункт призначення:" />
-                <TextBlock
-                    Margin="3,0"
-                    Foreground="Red"
-                    Text="*" />
-            </StackPanel>
-            <ComboBox Name="DestinationComboBox" Margin="0,5" />
-
-            <StackPanel Orientation="Horizontal">
-                <TextBlock Text="Тривалість:" />
+                <TextBlock Text="Тривалість (дні):" />
                 <TextBlock
                     Margin="3,0"
                     Foreground="Red"
@@ -64,18 +56,32 @@
             </StackPanel>
             <TextBox Name="DurationTextBox" Margin="0,5" />
 
-            <Button Width="150" Content="Вибрати зображення" />
+            <Button
+                Width="150"
+                Click="SelectImage"
+                Content="Вибрати зображення" />
             <Image
                 Name="PreviewImage"
                 Width="200"
                 Height="120"
-                Margin="5" />
+                Margin="5"
+                Source="{Binding ImagePath, Converter={StaticResource ImagePathToImageSourceConverter}}" />
 
-            <Button
-                Width="100"
+            <StackPanel
                 Margin="10"
                 HorizontalAlignment="Center"
-                Content="Зберегти" />
+                Orientation="Horizontal">
+                <Button
+                    Width="100"
+                    Margin="5"
+                    Click="SaveTour"
+                    Content="Зберегти" />
+                <Button
+                    Width="100"
+                    Margin="5"
+                    Click="Cancel"
+                    Content="Скасувати" />
+            </StackPanel>
         </StackPanel>
     </Grid>
 </Window>

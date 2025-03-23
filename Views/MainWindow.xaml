@@ -6,10 +6,9 @@
     xmlns:local="clr-namespace:Muse_Travel_Manager.Views"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     Title="Muse Travel Manager"
-    Width="1000"
-    Height="550"
-    MinWidth="800"
-    MinHeight="450"
+    MinWidth="1600"
+    MinHeight="900"
+    Loaded="LoadData"
     mc:Ignorable="d">
     <Grid Margin="10">
         <Grid.RowDefinitions>
@@ -25,87 +24,188 @@
             <Button
                 Width="120"
                 Margin="5"
+                Click="OpenAddTourWindow"
                 Content="Додати тур" />
             <Button
                 Width="140"
                 Margin="5"
+                Click="OpenAddClientWindow"
                 Content="Додати клієнта" />
             <Button
                 Width="160"
                 Margin="5"
+                Click="OpenAddDestinationWindow"
                 Content="Створити напрямок" />
             <Button
                 Width="160"
                 Margin="5"
+                Click="OpenBookingWindow"
                 Content="Створити бронювання" />
             <Button
                 Width="140"
                 Margin="5"
+                Click="GenerateReport"
                 Content="Згенерувати звіт" />
         </StackPanel>
 
         <!--  Основний контент  -->
         <Grid Grid.Row="1">
             <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="2*" />
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="*" />
                 <ColumnDefinition Width="*" />
             </Grid.ColumnDefinitions>
 
             <!--  Список турів  -->
-            <DataGrid
-                Grid.Column="0"
-                AutoGenerateColumns="False"
-                Background="White"
-                HeadersVisibility="Column">
+            <DataGrid Name="ToursDataGrid" AutoGenerateColumns="False">
                 <DataGrid.Columns>
-                    <DataGridTextColumn
-                        Width="*"
-                        Binding="{Binding Name}"
-                        Header="Назва" />
-                    <DataGridTextColumn
-                        Width="80"
-                        Binding="{Binding Price}"
-                        Header="Ціна" />
-                    <DataGridTextColumn
-                        Width="120"
-                        Binding="{Binding Date}"
-                        Header="Дата" />
-                    <DataGridTemplateColumn Width="100" Header="Зображення">
+                    <DataGridTemplateColumn Header="Зображення">
                         <DataGridTemplateColumn.CellTemplate>
                             <DataTemplate>
                                 <Image
-                                    Width="80"
+                                    Width="50"
                                     Height="50"
-                                    Source="{Binding ImagePath}" />
+                                    Source="{Binding ImagePath, Converter={StaticResource ImagePathToImageSourceConverter}}"
+                                    Stretch="UniformToFill" />
                             </DataTemplate>
                         </DataGridTemplateColumn.CellTemplate>
                     </DataGridTemplateColumn>
+                    <DataGridTextColumn
+                        Width="*"
+                        Binding="{Binding Destination}"
+                        Header="Напрямок туру" />
+                    <DataGridTextColumn
+                        Width="80"
+                        Binding="{Binding Price, StringFormat={}{0:F2} грн}"
+                        Header="Ціна" />
+                    <DataGridTextColumn
+                        Width="120"
+                        Binding="{Binding StartDate}"
+                        Header="Дата початку" />
+                    <DataGridTextColumn
+                        Width="120"
+                        Binding="{Binding Duration}"
+                        Header="Тривалість" />
                 </DataGrid.Columns>
             </DataGrid>
+
 
             <!--  Напрямки  -->
             <StackPanel
                 Grid.Column="1"
-                Margin="10"
+                Margin="5"
                 Background="White">
                 <TextBlock
                     Margin="0,0,0,10"
                     FontSize="16"
                     FontWeight="Bold"
                     Text="Напрямки" />
-                <ListBox ItemsSource="{Binding Destinations}">
+                <ListBox Name="DestinationsListBox">
                     <ListBox.ItemTemplate>
                         <DataTemplate>
-                            <StackPanel Orientation="Vertical">
+                            <StackPanel>
                                 <TextBlock
                                     FontSize="14"
                                     FontWeight="Bold"
                                     Text="{Binding Name}" />
+                                <TextBlock
+                                    FontSize="14"
+                                    FontWeight="Bold"
+                                    Text="{Binding Description}" />
+                                <TextBlock
+                                    FontSize="14"
+                                    FontWeight="Bold"
+                                    Text="{Binding PopularSeason}" />
                                 <Image
                                     Width="120"
                                     Height="80"
                                     Margin="0,5"
-                                    Source="{Binding ImagePath}" />
+                                    Source="{Binding ImagePath, Converter={StaticResource ImagePathToImageSourceConverter}}" />
+                            </StackPanel>
+                        </DataTemplate>
+                    </ListBox.ItemTemplate>
+                </ListBox>
+            </StackPanel>
+
+            <!--  Клієнти  -->
+            <StackPanel
+                Grid.Column="2"
+                Margin="5"
+                Background="White">
+                <TextBlock
+                    Margin="0,0,0,10"
+                    FontSize="16"
+                    FontWeight="Bold"
+                    Text="Клієнти" />
+                <ListBox Name="ClientsListBox">
+                    <ListBox.ItemTemplate>
+                        <DataTemplate>
+                            <StackPanel>
+                                <StackPanel Orientation="Horizontal">
+                                    <TextBlock
+                                        Margin="2,0"
+                                        FontSize="14"
+                                        FontWeight="Bold"
+                                        Text="{Binding FirstName}" />
+                                    <TextBlock
+                                        Margin="2,0"
+                                        FontSize="14"
+                                        FontWeight="Bold"
+                                        Text="{Binding LastName}" />
+                                </StackPanel>
+                                <TextBlock
+                                    FontSize="14"
+                                    FontWeight="Bold"
+                                    Text="{Binding Phone}" />
+                                <TextBlock
+                                    FontSize="14"
+                                    FontWeight="Bold"
+                                    Text="{Binding Email}" />
+                            </StackPanel>
+                        </DataTemplate>
+                    </ListBox.ItemTemplate>
+                </ListBox>
+            </StackPanel>
+
+            <!--  Бронювання  -->
+            <StackPanel
+                Grid.Column="3"
+                Margin="5"
+                Background="White">
+                <TextBlock
+                    Margin="0,0,0,10"
+                    FontSize="16"
+                    FontWeight="Bold"
+                    Text="Бронювання" />
+                <ListBox Name="BookingsListBox">
+                    <ListBox.ItemTemplate>
+                        <DataTemplate>
+                            <StackPanel>
+                                <TextBlock
+                                    FontSize="14"
+                                    FontWeight="Bold"
+                                    Text="{Binding Tour.Destination}" />
+                                <StackPanel Orientation="Horizontal">
+                                    <TextBlock
+                                        Margin="2,0"
+                                        FontSize="14"
+                                        FontWeight="Bold"
+                                        Text="{Binding FirstName}" />
+                                    <TextBlock
+                                        Margin="2,0"
+                                        FontSize="14"
+                                        FontWeight="Bold"
+                                        Text="{Binding LastName}" />
+                                </StackPanel>
+                                <TextBlock
+                                    FontSize="14"
+                                    FontWeight="Bold"
+                                    Text="{Binding BookingDate}" />
+                                <TextBlock
+                                    FontSize="14"
+                                    FontWeight="Bold"
+                                    Text="{Binding Status}" />
                             </StackPanel>
                         </DataTemplate>
                     </ListBox.ItemTemplate>

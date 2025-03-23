@@ -41,7 +41,7 @@
             <TextBox Name="PhoneTextBox" Margin="0,5" />
 
             <StackPanel Orientation="Horizontal">
-                <TextBlock Text="Електронна пошта:" />
+                <TextBlock Text="Електронна адреса:" />
                 <TextBlock
                     Margin="3,0"
                     Foreground="Red"
@@ -56,10 +56,12 @@
                 <Button
                     Width="100"
                     Margin="5"
+                    Click="OnSaveClick"
                     Content="Зберегти" />
                 <Button
                     Width="100"
                     Margin="5"
+                    Click="Cancel"
                     Content="Скасувати" />
             </StackPanel>
         </StackPanel>
