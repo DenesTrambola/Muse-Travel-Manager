@@ -78,7 +78,6 @@ public partial class BookingWindow : Window, INotifyPropertyChanged
         IEnumerable<Client> clients = await TravelManager.GetClientsAsync();
 
         TourComboBox.ItemsSource = tours;
-        TourComboBox.DisplayMemberPath = "Destination";
         ClientComboBox.ItemsSource = clients.Select(c => $"{c.GetFullName()}, {c.Email}, {c.Phone}");
     }
 }

@@ -7,5 +7,6 @@
     StartupUri="Views/MainWindow.xaml">
     <Application.Resources>
         <Converters:ImagePathToImageSourceConverter x:Key="ImagePathToImageSourceConverter" />
+        <Converters:TourToStringConverter x:Key="TourToStringConverter" />
     </Application.Resources>
 </Application>

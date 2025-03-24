@@ -24,7 +24,13 @@
             <ComboBox
                 Name="TourComboBox"
                 Margin="0,5"
-                SelectedItem="{Binding SelectedTour}" />
+                SelectedItem="{Binding SelectedTour, Mode=TwoWay}">
+                <ComboBox.ItemTemplate>
+                    <DataTemplate>
+                        <TextBlock Text="{Binding Converter={StaticResource TourToStringConverter}}" />
+                    </DataTemplate>
+                </ComboBox.ItemTemplate>
+            </ComboBox>
 
             <Image
                 Name="PreviewImage"

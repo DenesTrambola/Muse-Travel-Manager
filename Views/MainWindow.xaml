@@ -86,7 +86,7 @@
                     <DataGridTextColumn
                         Width="120"
                         Binding="{Binding Duration}"
-                        Header="Тривалість" />
+                        Header="Тривалість (дні)" />
                 </DataGrid.Columns>
             </DataGrid>
 
@@ -191,12 +191,12 @@
                                         Margin="2,0"
                                         FontSize="14"
                                         FontWeight="Bold"
-                                        Text="{Binding FirstName}" />
+                                        Text="{Binding Client.FirstName}" />
                                     <TextBlock
                                         Margin="2,0"
                                         FontSize="14"
                                         FontWeight="Bold"
-                                        Text="{Binding LastName}" />
+                                        Text="{Binding Client.LastName}" />
                                 </StackPanel>
                                 <TextBlock
                                     FontSize="14"
