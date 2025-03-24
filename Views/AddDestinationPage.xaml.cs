@@ -2,10 +2,11 @@
 using Muse_Travel_Manager.Models;
 using System.ComponentModel;
 using System.Windows;
+using System.Windows.Controls;
 
 namespace Muse_Travel_Manager.Views;
 
-public partial class AddDestinationWindow : Window, INotifyPropertyChanged
+public partial class AddDestinationPage : Page, INotifyPropertyChanged
 {
     public event PropertyChangedEventHandler? PropertyChanged;
 
@@ -21,7 +22,7 @@ public partial class AddDestinationWindow : Window, INotifyPropertyChanged
         }
     }
 
-    public AddDestinationWindow()
+    public AddDestinationPage()
     {
         InitializeComponent();
         DataContext = this;
@@ -65,11 +66,12 @@ public partial class AddDestinationWindow : Window, INotifyPropertyChanged
         }
 
         MessageBox.Show("Напрямок додано успішно!", "Успіх", MessageBoxButton.OK, MessageBoxImage.Information);
-        this.Close();
+        Cancel(sender, e);
     }
 
     private void Cancel(object sender, RoutedEventArgs e)
     {
-        this.Close();
+        MainWindow mainWindow = (MainWindow)Application.Current.MainWindow;
+        mainWindow.MainFrame.Navigate(new HomePage());
     }
 }

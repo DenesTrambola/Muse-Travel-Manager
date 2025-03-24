@@ -1,11 +1,12 @@
 ﻿using Muse_Travel_Manager.Models;
 using System.Windows;
+using System.Windows.Controls;
 
 namespace Muse_Travel_Manager.Views;
 
-public partial class AddClientWindow : Window
+public partial class AddClientPage : Page
 {
-    public AddClientWindow()
+    public AddClientPage()
     {
         InitializeComponent();
     }
@@ -38,11 +39,12 @@ public partial class AddClientWindow : Window
         }
 
         MessageBox.Show("Клієнт доданий успішно!", "Успіх", MessageBoxButton.OK, MessageBoxImage.Information);
-        this.Close();
+        Cancel(sender, e);
     }
 
     private void Cancel(object sender, RoutedEventArgs e)
     {
-        this.Close();
+        MainWindow mainWindow = (MainWindow)Application.Current.MainWindow;
+        mainWindow.MainFrame.Navigate(new HomePage());
     }
 }

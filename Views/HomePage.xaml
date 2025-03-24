@@ -1,0 +1,443 @@
+﻿<Page
+    x:Class="Muse_Travel_Manager.Views.HomePage"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:local="clr-namespace:Muse_Travel_Manager.Views"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    Title="MainPage"
+    Loaded="LoadData"
+    SizeChanged="Window_SizeChanged"
+    mc:Ignorable="d">
+
+    <Grid Margin="10">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+            <RowDefinition Height="Auto" />
+        </Grid.RowDefinitions>
+
+        <!--  Верхня панель з кнопками  -->
+        <WrapPanel
+            Margin="0,0,0,10"
+            HorizontalAlignment="Right"
+            Orientation="Horizontal">
+            <Button
+                Margin="5"
+                Click="OpenAddTourWindow"
+                Content="Додати тур" />
+            <Button
+                Margin="5"
+                Click="OpenAddClientWindow"
+                Content="Додати клієнта" />
+            <Button
+                Margin="5"
+                Click="OpenAddDestinationWindow"
+                Content="Створити напрямок" />
+            <Button
+                Margin="5"
+                Click="OpenBookingWindow"
+                Content="Створити бронювання" />
+            <Button
+                Margin="5"
+                Click="GenerateReport"
+                Content="Згенерувати звіт" />
+        </WrapPanel>
+
+        <!--  Основний контент  -->
+        <Grid Grid.Row="1">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="Auto" />
+            </Grid.ColumnDefinitions>
+
+            <!--  Список турів  -->
+            <ScrollViewer
+                Name="ToursSection"
+                Margin="5"
+                Background="White"
+                Visibility="Visible">
+                <StackPanel>
+                    <TextBlock
+                        Margin="0,0,0,10"
+                        FontSize="16"
+                        FontWeight="Bold"
+                        Text="Тури" />
+
+                    <TextBlock
+                        Name="EmptyToursText"
+                        FontSize="20"
+                        FontWeight="Bold"
+                        Foreground="Red"
+                        Text="Немає даних!"
+                        Visibility="Collapsed" />
+
+                    <StackPanel
+                        Name="ToursPagination"
+                        Margin="10"
+                        HorizontalAlignment="Center"
+                        Orientation="Horizontal">
+                        <Button
+                            Margin="5"
+                            Padding="5,2"
+                            Click="PreviousToursPage_Click"
+                            Content="⏪ Назад" />
+                        <TextBlock
+                            Name="ToursPageIndicator"
+                            VerticalAlignment="Center"
+                            FontSize="16" />
+                        <Button
+                            Margin="5"
+                            Padding="5,2"
+                            Click="NextToursPage_Click"
+                            Content="Вперед ⏩" />
+                    </StackPanel>
+
+                    <DataGrid
+                        Name="ToursDataGrid"
+                        AutoGenerateColumns="False"
+                        ItemsSource="{Binding PagedTours}"
+                        Visibility="Visible">
+                        <DataGrid.Columns>
+                            <DataGridTextColumn
+                                Width="2*"
+                                MinWidth="80"
+                                Binding="{Binding Destination}"
+                                Header="Напрямок" />
+                            <DataGridTextColumn
+                                Width="*"
+                                MinWidth="50"
+                                Binding="{Binding Price, StringFormat={}{0:F2} грн}"
+                                Header="Ціна" />
+                            <DataGridTextColumn
+                                Width="*"
+                                MinWidth="50"
+                                Binding="{Binding StartDate}"
+                                Header="Дата початку" />
+                            <DataGridTextColumn
+                                Width="*"
+                                MinWidth="50"
+                                Binding="{Binding Duration}"
+                                Header="Тривалість (дні)" />
+                            <DataGridTemplateColumn Header="Зображення">
+                                <DataGridTemplateColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <Image
+                                            Width="50"
+                                            Height="50"
+                                            Source="{Binding ImagePath, Converter={StaticResource ImagePathToImageSourceConverter}}"
+                                            Stretch="UniformToFill" />
+                                    </DataTemplate>
+                                </DataGridTemplateColumn.CellTemplate>
+                            </DataGridTemplateColumn>
+                        </DataGrid.Columns>
+                    </DataGrid>
+                </StackPanel>
+            </ScrollViewer>
+
+            <!--  Напрямки  -->
+            <ScrollViewer
+                Name="DestinationsSection"
+                Margin="5"
+                Background="White"
+                Visibility="Collapsed">
+                <StackPanel>
+                    <TextBlock
+                        Margin="0,0,0,10"
+                        FontSize="16"
+                        FontWeight="Bold"
+                        Text="Напрямки" />
+
+                    <TextBlock
+                        Name="EmptyDestinationsText"
+                        FontSize="20"
+                        FontWeight="Bold"
+                        Foreground="Red"
+                        Text="Немає даних!"
+                        Visibility="Collapsed" />
+
+                    <StackPanel
+                        Name="DestinationsPagination"
+                        Margin="10"
+                        HorizontalAlignment="Center"
+                        Orientation="Horizontal">
+                        <Button
+                            Margin="5"
+                            Padding="5,2"
+                            Click="PreviousDestinationsPage_Click"
+                            Content="⏪ Назад" />
+                        <TextBlock
+                            Name="DestinationsPageIndicator"
+                            VerticalAlignment="Center"
+                            FontSize="16" />
+                        <Button
+                            Margin="5"
+                            Padding="5,2"
+                            Click="NextDestinationsPage_Click"
+                            Content="Вперед ⏩" />
+                    </StackPanel>
+
+                    <DataGrid
+                        Name="DestinationsDataGrid"
+                        AutoGenerateColumns="False"
+                        ItemsSource="{Binding PagedDestinations}"
+                        Visibility="Visible">
+                        <DataGrid.Columns>
+                            <DataGridTextColumn
+                                Width="*"
+                                MinWidth="50"
+                                Binding="{Binding Name}"
+                                Header="Назва" />
+                            <DataGridTextColumn
+                                Width="*"
+                                MinWidth="80"
+                                Binding="{Binding Description}"
+                                Header="Опис" />
+                            <DataGridTextColumn
+                                Width="*"
+                                MinWidth="50"
+                                Binding="{Binding PopularSeason}"
+                                Header="Популярний сезон" />
+                            <DataGridTemplateColumn Header="Зображення">
+                                <DataGridTemplateColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <Image
+                                            Width="50"
+                                            Height="50"
+                                            Source="{Binding ImagePath, Converter={StaticResource ImagePathToImageSourceConverter}}"
+                                            Stretch="UniformToFill" />
+                                    </DataTemplate>
+                                </DataGridTemplateColumn.CellTemplate>
+                            </DataGridTemplateColumn>
+                        </DataGrid.Columns>
+                    </DataGrid>
+                </StackPanel>
+            </ScrollViewer>
+
+            <!--  Клієнти  -->
+            <ScrollViewer
+                Name="ClientsSection"
+                Margin="5"
+                Background="White"
+                Visibility="Collapsed">
+                <StackPanel>
+                    <TextBlock
+                        Margin="0,0,0,10"
+                        FontSize="16"
+                        FontWeight="Bold"
+                        Text="Клієнти" />
+
+                    <TextBlock
+                        Name="EmptyClientsText"
+                        FontSize="20"
+                        FontWeight="Bold"
+                        Foreground="Red"
+                        Text="Немає даних!"
+                        Visibility="Collapsed" />
+
+                    <StackPanel
+                        Name="ClientsPagination"
+                        Margin="10"
+                        HorizontalAlignment="Center"
+                        Orientation="Horizontal">
+                        <Button
+                            Margin="5"
+                            Padding="5,2"
+                            Click="PreviousClientsPage_Click"
+                            Content="⏪ Назад" />
+                        <TextBlock
+                            Name="ClientsPageIndicator"
+                            VerticalAlignment="Center"
+                            FontSize="16" />
+                        <Button
+                            Margin="5"
+                            Padding="5,2"
+                            Click="NextClientsPage_Click"
+                            Content="Вперед ⏩" />
+                    </StackPanel>
+
+                    <DataGrid
+                        Name="ClientsDataGrid"
+                        AutoGenerateColumns="False"
+                        ItemsSource="{Binding PagedClients}"
+                        Visibility="Visible">
+                        <DataGrid.Columns>
+                            <DataGridTextColumn
+                                Width="*"
+                                MinWidth="50"
+                                Binding="{Binding FirstName}"
+                                Header="Ім'я" />
+                            <DataGridTextColumn
+                                Width="*"
+                                MinWidth="50"
+                                Binding="{Binding LastName}"
+                                Header="Прізвище" />
+                            <DataGridTextColumn
+                                Width="*"
+                                MinWidth="50"
+                                Binding="{Binding Phone}"
+                                Header="Телефон" />
+                            <DataGridTextColumn
+                                Width="*"
+                                MinWidth="50"
+                                Binding="{Binding Email}"
+                                Header="Ел. адреса" />
+                        </DataGrid.Columns>
+                    </DataGrid>
+                </StackPanel>
+            </ScrollViewer>
+
+            <!--  Бронювання  -->
+            <ScrollViewer
+                Name="BookingsSection"
+                Margin="5"
+                Background="White"
+                Visibility="Collapsed">
+                <StackPanel>
+                    <TextBlock
+                        Margin="0,0,0,10"
+                        FontSize="16"
+                        FontWeight="Bold"
+                        Text="Бронювання" />
+
+                    <TextBlock
+                        Name="EmptyBookingsText"
+                        FontSize="20"
+                        FontWeight="Bold"
+                        Foreground="Red"
+                        Text="Немає даних!"
+                        Visibility="Collapsed" />
+
+                    <StackPanel
+                        Name="BookingsPagination"
+                        Margin="10"
+                        HorizontalAlignment="Center"
+                        Orientation="Horizontal">
+                        <Button
+                            Margin="5"
+                            Padding="5,2"
+                            Click="PreviousBookingsPage_Click"
+                            Content="⏪ Назад" />
+                        <TextBlock
+                            Name="BookingsPageIndicator"
+                            VerticalAlignment="Center"
+                            FontSize="16" />
+                        <Button
+                            Margin="5"
+                            Padding="5,2"
+                            Click="NextBookingsPage_Click"
+                            Content="Вперед ⏩" />
+                    </StackPanel>
+
+                    <DataGrid
+                        Name="BookingsDataGrid"
+                        AutoGenerateColumns="False"
+                        ItemsSource="{Binding PagedBookings}"
+                        Visibility="Visible">
+                        <DataGrid.Columns>
+                            <DataGridTextColumn
+                                Width="*"
+                                MinWidth="50"
+                                Binding="{Binding Tour.Destination}"
+                                Header="Напрямок" />
+                            <DataGridTemplateColumn
+                                Width="2*"
+                                MinWidth="80"
+                                Header="Клієнт">
+                                <DataGridTemplateColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <StackPanel Orientation="Horizontal">
+                                            <TextBlock
+                                                Margin="2,0"
+                                                FontSize="14"
+                                                FontWeight="Bold"
+                                                Text="{Binding Client.FirstName}" />
+                                            <TextBlock
+                                                Margin="2,0"
+                                                FontSize="14"
+                                                FontWeight="Bold"
+                                                Text="{Binding Client.LastName}" />
+                                        </StackPanel>
+                                    </DataTemplate>
+                                </DataGridTemplateColumn.CellTemplate>
+                            </DataGridTemplateColumn>
+                            <DataGridTextColumn
+                                Width="*"
+                                MinWidth="50"
+                                Binding="{Binding BookingDate}"
+                                Header="Дата" />
+                            <DataGridTextColumn
+                                Width="*"
+                                MinWidth="50"
+                                Binding="{Binding Status}"
+                                Header="Статус" />
+                        </DataGrid.Columns>
+                    </DataGrid>
+                </StackPanel>
+            </ScrollViewer>
+
+            <!--  Панелі вибирання таблиць  -->
+            <StackPanel
+                Name="Sidebar"
+                Grid.Column="1"
+                Background="#4CAF50">
+                <TextBlock
+                    Margin="10,0"
+                    FontSize="18"
+                    FontWeight="Bold"
+                    Foreground="White"
+                    Text="Вибери таблицю" />
+                <Button
+                    Name="SidebarShowToursBtn"
+                    Click="ShowTours"
+                    Content="Тури"
+                    IsEnabled="False" />
+                <Button
+                    Name="SidebarShowClientsBtn"
+                    Click="ShowClients"
+                    Content="Клієнти"
+                    IsEnabled="True" />
+                <Button
+                    Name="SidebarShowDestinationsBtn"
+                    Click="ShowDestinations"
+                    Content="Напрямки"
+                    IsEnabled="True" />
+                <Button
+                    Name="SidebarShowBookingsBtn"
+                    Click="ShowBookings"
+                    Content="Бронювання"
+                    IsEnabled="True" />
+            </StackPanel>
+        </Grid>
+
+        <StackPanel
+            Name="BottomBar"
+            Grid.Row="2"
+            Height="50"
+            VerticalAlignment="Bottom"
+            Background="#2E7D32"
+            Orientation="Horizontal"
+            Visibility="Collapsed">
+            <Button
+                Name="BottombarShowToursBtn"
+                Click="ShowTours"
+                Content="Тури"
+                IsEnabled="False" />
+            <Button
+                Name="BottombarShowClientsBtn"
+                Click="ShowClients"
+                Content="Клієнти"
+                IsEnabled="True" />
+            <Button
+                Name="BottombarShowDestinationsBtn"
+                Click="ShowDestinations"
+                Content="Напрямки"
+                IsEnabled="True" />
+            <Button
+                Name="BottombarShowBookingsBtn"
+                Click="ShowBookings"
+                Content="Бронювання"
+                IsEnabled="True" />
+        </StackPanel>
+    </Grid>
+</Page>

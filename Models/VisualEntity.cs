@@ -1,4 +1,6 @@
-﻿namespace Muse_Travel_Manager.Models;
+﻿using System.IO;
+
+namespace Muse_Travel_Manager.Models;
 
 public abstract class VisualEntity
 {
@@ -8,7 +10,14 @@ public abstract class VisualEntity
 
     protected VisualEntity(string? imagePath)
     {
-        ImagePath = imagePath;
+        if (imagePath is null)
+        {
+            ImagePath = imagePath;
+            return;
+        }
+
+        string projectRoot = Directory.GetParent(AppDomain.CurrentDomain.BaseDirectory).Parent.Parent.Parent.FullName;
+        ImagePath = Path.Combine(projectRoot, "Images", imagePath);
     }
 
     public virtual void LoadImage()
